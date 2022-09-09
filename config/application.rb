@@ -14,8 +14,9 @@ require 'action_mailer/railtie'
 require 'action_text/engine'
 require 'action_view/railtie'
 require 'action_cable/engine'
-# require "sprockets/railtie"
+require "sprockets/railtie"
 require 'rails/test_unit/railtie'
+
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -23,6 +24,12 @@ Bundler.require(*Rails.groups)
 
 module TechTests
   class Application < Rails::Application
+    include Rails.application.routes.url_helpers
+
+    config.middleware.use ActionDispatch::Flash
+    config.middleware.insert_after Rack::Runtime, Rack::MethodOverride
+    config.assets.paths << Rails.root.join("assets")
+
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 6.1
 
