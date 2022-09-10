@@ -25,7 +25,6 @@ Bundler.require(*Rails.groups)
 module TechTests
   class Application < Rails::Application
     include Rails.application.routes.url_helpers
-
     config.middleware.use ActionDispatch::Flash
     config.middleware.insert_after Rack::Runtime, Rack::MethodOverride
     config.assets.paths << Rails.root.join("assets")
