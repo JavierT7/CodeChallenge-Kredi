@@ -1,4 +1,6 @@
 class InvoicesController < ApplicationController
+  require 'zip'
+
   before_action :set_invoice, only: %i[ show edit update destroy ]
 
   # GET /invoices
@@ -12,9 +14,9 @@ class InvoicesController < ApplicationController
       @range_max = filters['amount_range_max']
 
       @invoices = Invoice.f_by_status(@status).f_by_emitter(@emitter).f_by_receiver(@receiver).min_amount(@range_min).max_amount(@range_max)
-      @invoices = @invoices.paginate(:page => params[:page], :per_page => 1)
+      @invoices = @invoices.paginate(:page => params[:page], :per_page => 50)
     else
-      @invoices = Invoice.all.paginate(:page => params[:page], :per_page => 1)
+      @invoices = Invoice.all.paginate(:page => params[:page], :per_page => 50)
     end
   end
 
@@ -84,6 +86,35 @@ class InvoicesController < ApplicationController
       @invoices = @invoices.paginate(:page => params[:page], :per_page => 50)
     else
       @invoices = Invoice.where(emitter: current_user.id).or(Invoice.where(receiver: current_user.id)).paginate(:page => params[:page], :per_page => 50)
+    end
+  end
+
+  def upload_zip_file
+    if params[:zip_file].present?
+      Zip::File.open(params[:zip_file].tempfile) do |zip_file|
+        zip_file.each do |entry|
+          # Extract to file/directory/symlink
+          puts "Extracting #{entry.name}"
+          # Read into memory
+          if entry.file?
+            content = entry.get_input_stream.read
+            hash = Hash.from_xml(content)['hash']
+            user_emitter  = User.find_by(rfc: hash["emitter"]['rfc'])
+            user_receiver = User.find_by(rfc: hash["receiver"]['rfc'])
+            unless user_emitter.present?
+              user_emitter = User.create!(name: hash["emitter"]['name'], rfc: hash["emitter"]['rfc'], email: "#{hash["emitter"]['rfc']}@tmp.mx", password:'tmp_pwd', password_confirmation: 'tmp_pwd')
+            end
+            unless user_receiver.present?
+              user_receiver = User.create!(name: hash["receiver"]['name'], rfc: hash["receiver"]['rfc'], email: "#{hash["receiver"]['rfc']}@tmp.mx", password:'tmp_pwd', password_confirmation: 'tmp_pwd')
+            end
+            Invoice.create!(invoice_uid: hash["invoice_uuid"], status: hash['status'].upcase,emitter_id: user_emitter.id, receiver_id: user_receiver.id, amount_cents: hash['amount']['cents'], amount_currency: hash['amount']['currency'], emitted_at: hash['emitted_at'], expires_at: hash['expires_at'], signed_at: hash['signed_at'], cfdi_digital_stamp: hash['cfdi_digital_stamp'])
+          end
+        end
+      end
+    end
+    respond_to do |format|
+      format.html { redirect_to invoices_url, notice: "Invoices created successfully created." }
+      format.json { head :no_content }
     end
   end
 
