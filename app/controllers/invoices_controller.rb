@@ -1,20 +1,22 @@
 class InvoicesController < ApplicationController
+  require 'zip'
+
   before_action :set_invoice, only: %i[ show edit update destroy ]
 
   # GET /invoices
   def index
     if params[:filters].present?
-      filters = params[:filters]
-      @status = filters['status']
-      @emitter = filters['emitter']
-      @receiver = filters['receiver']
-      @range_min = filters['amount_range_min']
-      @range_max = filters['amount_range_max']
+      filters     = params[:filters]
+      @status     = filters['status']
+      @emitter    = filters['emitter']
+      @receiver   = filters['receiver']
+      @range_min  = filters['amount_range_min']
+      @range_max  = filters['amount_range_max']
 
       @invoices = Invoice.f_by_status(@status).f_by_emitter(@emitter).f_by_receiver(@receiver).min_amount(@range_min).max_amount(@range_max)
-      @invoices = @invoices.paginate(:page => params[:page], :per_page => 1)
+      @invoices = @invoices.paginate(:page => params[:page], :per_page => 50)
     else
-      @invoices = Invoice.all.paginate(:page => params[:page], :per_page => 1)
+      @invoices = Invoice.all.paginate(:page => params[:page], :per_page => 50)
     end
   end
 
@@ -84,6 +86,27 @@ class InvoicesController < ApplicationController
       @invoices = @invoices.paginate(:page => params[:page], :per_page => 50)
     else
       @invoices = Invoice.where(emitter: current_user.id).or(Invoice.where(receiver: current_user.id)).paginate(:page => params[:page], :per_page => 50)
+    end
+  end
+
+  def upload_zip_file
+    if params[:zip_file].present?
+      Zip::File.open(params[:zip_file].tempfile) do |zip_file|
+        zip_file.each do |entry|
+          # Extract to file/directory/symlink
+          puts "Extracting #{entry.name}"
+          # Read into memory
+          if entry.file?
+            content = entry.get_input_stream.read
+            hash = Hash.from_xml(content)['hash']
+            SaveInvoicesWorker.perform_async(hash)
+          end
+        end
+      end
+    end
+    respond_to do |format|
+      format.html { redirect_to invoices_url, notice: "Invoices created successfully created." }
+      format.json { head :no_content }
     end
   end
 
