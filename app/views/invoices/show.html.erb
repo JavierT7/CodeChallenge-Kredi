@@ -1,0 +1,54 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Invoice uid:</strong>
+  <%= @invoice.invoice_uid %>
+</p>
+
+<p>
+  <strong>Status:</strong>
+  <%= @invoice.status %>
+</p>
+
+<p>
+  <strong>Emitter:</strong>
+  <%= @invoice.emitter_id %>
+</p>
+
+<p>
+  <strong>Receiver:</strong>
+  <%= @invoice.receiver_id %>
+</p>
+
+<p>
+  <strong>Amount cents:</strong>
+  <%= @invoice.amount_cents %>
+</p>
+
+<p>
+  <strong>Amount currency:</strong>
+  <%= @invoice.amount_currency %>
+</p>
+
+<p>
+  <strong>Emitted at:</strong>
+  <%= @invoice.emitted_at %>
+</p>
+
+<p>
+  <strong>Expires at:</strong>
+  <%= @invoice.expires_at %>
+</p>
+
+<p>
+  <strong>Signed at:</strong>
+  <%= @invoice.signed_at %>
+</p>
+
+<p>
+  <strong>Cfdi digital stamp:</strong>
+  <%= @invoice.cfdi_digital_stamp %>
+</p>
+
+<%= link_to 'Edit', edit_invoice_path(@invoice) %> |
+<%= link_to 'Back', invoices_path %>

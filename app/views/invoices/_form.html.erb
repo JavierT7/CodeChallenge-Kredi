@@ -1,0 +1,67 @@
+<%= form_for @invoice do |form| %>
+  <% if @invoice.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@invoice.errors.count, "error") %> prohibited this invoice from being saved:</h2>
+
+      <ul>
+        <% @invoice.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :invoice_uid %>
+    <%= form.text_field :invoice_uid %>
+  </div>
+
+  <div class="field">
+    <%= form.label :status %>
+    <%= form.select :status, Invoice::INVOICE_STATUSES.map { |s| [s] }%>
+  </div>
+
+  <div class="field">
+    <%= form.label :emitter_id %>
+    <%= form.select :emitter_id, User.all.collect{|u| [u.name, u.id]}%>
+  </div>
+
+  <div class="field">
+    <%= form.label :receiver_id %>
+    <%= form.select :receiver_id, User.all.collect{|u| [u.name, u.id]}%>
+  </div>
+
+  <div class="field">
+    <%= form.label :amount_cents %>
+    <%= form.number_field :amount_cents %>
+  </div>
+
+  <div class="field">
+    <%= form.label :amount_currency %>
+    <%= form.text_field :amount_currency %>
+  </div>
+
+  <div class="field">
+    <%= form.label :emitted_at %>
+    <%= form.datetime_select :emitted_at %>
+  </div>
+
+  <div class="field">
+    <%= form.label :expires_at %>
+    <%= form.datetime_select :expires_at %>
+  </div>
+
+  <div class="field">
+    <%= form.label :signed_at %>
+    <%= form.datetime_select :signed_at %>
+  </div>
+
+  <div class="field">
+    <%= form.label :cfdi_digital_stamp %>
+    <%= form.text_field :cfdi_digital_stamp %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>
