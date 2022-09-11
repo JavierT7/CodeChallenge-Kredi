@@ -6,12 +6,12 @@ class InvoicesController < ApplicationController
   # GET /invoices
   def index
     if params[:filters].present?
-      filters = params[:filters]
-      @status = filters['status']
-      @emitter = filters['emitter']
-      @receiver = filters['receiver']
-      @range_min = filters['amount_range_min']
-      @range_max = filters['amount_range_max']
+      filters     = params[:filters]
+      @status     = filters['status']
+      @emitter    = filters['emitter']
+      @receiver   = filters['receiver']
+      @range_min  = filters['amount_range_min']
+      @range_max  = filters['amount_range_max']
 
       @invoices = Invoice.f_by_status(@status).f_by_emitter(@emitter).f_by_receiver(@receiver).min_amount(@range_min).max_amount(@range_max)
       @invoices = @invoices.paginate(:page => params[:page], :per_page => 50)
@@ -99,15 +99,7 @@ class InvoicesController < ApplicationController
           if entry.file?
             content = entry.get_input_stream.read
             hash = Hash.from_xml(content)['hash']
-            user_emitter  = User.find_by(rfc: hash["emitter"]['rfc'])
-            user_receiver = User.find_by(rfc: hash["receiver"]['rfc'])
-            unless user_emitter.present?
-              user_emitter = User.create!(name: hash["emitter"]['name'], rfc: hash["emitter"]['rfc'], email: "#{hash["emitter"]['rfc']}@tmp.mx", password:'tmp_pwd', password_confirmation: 'tmp_pwd')
-            end
-            unless user_receiver.present?
-              user_receiver = User.create!(name: hash["receiver"]['name'], rfc: hash["receiver"]['rfc'], email: "#{hash["receiver"]['rfc']}@tmp.mx", password:'tmp_pwd', password_confirmation: 'tmp_pwd')
-            end
-            Invoice.create!(invoice_uid: hash["invoice_uuid"], status: hash['status'].upcase,emitter_id: user_emitter.id, receiver_id: user_receiver.id, amount_cents: hash['amount']['cents'], amount_currency: hash['amount']['currency'], emitted_at: hash['emitted_at'], expires_at: hash['expires_at'], signed_at: hash['signed_at'], cfdi_digital_stamp: hash['cfdi_digital_stamp'])
+            SaveInvoicesWorker.perform_async(hash)
           end
         end
       end

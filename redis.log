@@ -1,0 +1,3 @@
+OK
+1662924126.288030 [0 127.0.0.1:59712] "sadd" "queues" "default"
+1662924126.288089 [0 127.0.0.1:59712] "lpush" "queue:default" "{\"retry\":true,\"queue\":\"default\",\"args\":[\"#<ActionDispatch::Http::UploadedFile:0x00000001157bfa00>\"],\"class\":\"SaveInvoicesWorker\",\"jid\":\"7ab4ef6a82c0f3889f6e6a7d\",\"created_at\":1662924126.287213,\"enqueued_at\":1662924126.2875981}"
