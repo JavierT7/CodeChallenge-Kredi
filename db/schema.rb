@@ -10,17 +10,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_09_09_150153) do
+ActiveRecord::Schema.define(version: 2022_09_10_213052) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "invoices", force: :cascade do |t|
+    t.string "invoice_uid"
     t.string "status"
-    t.integer "emitter"
-    t.integer "receiver"
-    t.float "amount_range"
+    t.integer "emitter_id"
+    t.integer "receiver_id"
+    t.integer "amount_cents"
+    t.string "amount_currency"
     t.datetime "emitted_at"
+    t.datetime "expires_at"
+    t.datetime "signed_at"
+    t.string "cfdi_digital_stamp"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
