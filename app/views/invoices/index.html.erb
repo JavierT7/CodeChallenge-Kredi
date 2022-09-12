@@ -91,7 +91,7 @@
         <td><%= invoice.emitted_at.strftime("%d/%m/%Y at %I:%M%p") %></td>
         <td><%= invoice.expires_at.strftime("%d/%m/%Y at %I:%M%p") %></td>
         <td><%= invoice.signed_at.strftime("%d/%m/%Y at %I:%M%p") %></td>
-        <td><a href="/">QR</a></td>
+        <td><a href="<%= invoice_qr_code_path(invoice.id) %>">QR</a></td>
         <td>
           <%= link_to 'Show', invoice %>
           <%= link_to 'Edit', edit_invoice_path(invoice) %>

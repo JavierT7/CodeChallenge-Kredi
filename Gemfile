@@ -42,6 +42,7 @@ group :development, :test do
   gem 'simplecov'
   gem 'pry'
   gem 'pry-byebug'
+  gem "rails_best_practices"
 end
 
 group :development do
@@ -61,5 +62,7 @@ gem 'rubyzip'
 
 gem "sidekiq", "~> 6.5"
 
-gem "rails_best_practices"
+gem 'net-smtp'
+
+gem 'rqrcode'
 

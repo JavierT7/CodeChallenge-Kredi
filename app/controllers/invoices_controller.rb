@@ -14,9 +14,9 @@ class InvoicesController < ApplicationController
       @range_max  = filters['amount_range_max']
 
       @invoices = Invoice.f_by_status(@status).f_by_emitter(@emitter).f_by_receiver(@receiver).min_amount(@range_min).max_amount(@range_max)
-      @invoices = @invoices.paginate(:page => params[:page], :per_page => 50)
+      @invoices = @invoices.paginate(:page => params[:page], :per_page => 30)
     else
-      @invoices = Invoice.all.paginate(:page => params[:page], :per_page => 50)
+      @invoices = Invoice.all.paginate(:page => params[:page], :per_page => 30)
     end
   end
 
@@ -83,9 +83,9 @@ class InvoicesController < ApplicationController
                              filters["max_emitted_at(2i)"].to_i,
                              filters["max_emitted_at(3i)"].to_i)
       @invoices = Invoice.f_by_type(@invoice_type, current_user.id).f_by_min_emitted_at(@start_date).f_by_max_emitted_at(@end_date)
-      @invoices = @invoices.paginate(:page => params[:page], :per_page => 50)
+      @invoices = @invoices.paginate(:page => params[:page], :per_page => 30)
     else
-      @invoices = Invoice.where(emitter: current_user.id).or(Invoice.where(receiver: current_user.id)).paginate(:page => params[:page], :per_page => 50)
+      @invoices = Invoice.where(emitter: current_user.id).or(Invoice.where(receiver: current_user.id)).paginate(:page => params[:page], :per_page => 30)
     end
   end
 
@@ -97,6 +97,17 @@ class InvoicesController < ApplicationController
       format.html { redirect_to invoices_url, notice: "Invoices in process, please refresh later." }
       format.json { head :no_content }
     end
+  end
+
+  def invoice_qr_code
+    @invoice = Invoice.find(params[:id])
+    @qr_code = RQRCode::QRCode.new(@invoice.try(:cfdi_digital_stamp))
+    @svg = @qr_code.as_svg(
+                       offset: 0,
+                       color: '000',
+                       shape_rendering: 'cripsEdges',
+                       module_size: 6
+    )
   end
 
   private
