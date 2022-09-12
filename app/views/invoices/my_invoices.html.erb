@@ -1,56 +1,70 @@
-<h1>Invoices</h1>
+<div class="content-container">
+    <a href="/invoices" class="goBack">< Invoices</a>
+    <h1>Invoices</h1>
+    <span><strong><%= @invoices.count %> Invoices</strong></span>
 
-<span><strong><%= @invoices.count %> Invoices</strong></span>
-<%= form_tag(my_invoices_path, method: :get) do %>
-  <span>Filter</span>
-  <div>
-    Invoice Type:  <%= select :filters, :invoice_type, Invoice::INVOICE_TYPES.map { |s| [s] }, selected: @invoice_type %>
-    <div>
-      Issue Date from <%= date_select :filters, :min_emitted_at, default: -1.year.from_now, selected: @start_date.present? ? @start_date : nil %>
-      to
-      <%= date_select :filters, :max_emitted_at, selected: @end_date.present? ? @end_date : nil %>
+    <div class="content-subhead">
+      <div>
+        <%= form_tag(my_invoices_path, method: :get) do %>
+          <span>Filter</span>
+          <div class="filter-input">
+            <span style="width: 115px !important;">
+              Invoice Type:
+            </span>
+            <%= select :filters, :invoice_type, Invoice::INVOICE_TYPES.map { |s| [s] }, {selected: @invoice_type}, {class: "select-lg"}  %>
+          </div>
+          <div>
+            Issue Date from <%= date_select :filters, :min_emitted_at, default: -1.year.from_now, selected: @start_date.present? ? @start_date : nil %>
+            to
+            <%= date_select :filters, :max_emitted_at, selected: @end_date.present? ? @end_date : nil %>
+          </div>
+
+          <div class="filter-buttons">
+            <a href="/my_invoices" class="filter-btn-outline">Clear</a>
+            <%= submit_tag "Search", class:"filter-btn"%>
+          </div>
+        <% end %>
+      </div>
     </div>
-    <%= submit_tag "Search"%>
-  </div>
-<% end %>
 
 
-<table>
-  <thead>
-  <tr>
-    <th>Invoice uid</th>
-    <th>Status</th>
-    <th>Emitter</th>
-    <th>Receiver</th>
-    <th>Amount cents</th>
-    <th>Amount currency</th>
-    <th>Emitted at</th>
-    <th>Expires at</th>
-    <th>Signed at</th>
-    <th>Cfdi digital stamp</th>
-    <th colspan="3"></th>
-  </tr>
-  </thead>
+    <table>
+      <thead>
+      <tr>
+        <th>Invoice uid</th>
+        <th>Status</th>
+        <th>Emitter</th>
+        <th>Receiver</th>
+        <th>Amount cents</th>
+        <th>Amount currency</th>
+        <th>Emitted at</th>
+        <th>Expires at</th>
+        <th>Signed at</th>
+        <th>Cfdi digital stamp</th>
+        <th colspan="3"></th>
+      </tr>
+      </thead>
 
-  <tbody>
-  <% @invoices.each do |invoice| %>
-    <tr>
-      <td><%= invoice.invoice_uid %></td>
-      <td><%= invoice.status %></td>
-      <td><%= invoice.emitter.name %></td>
-      <td><%= invoice.receiver.name %></td>
-      <td><%= invoice.amount_cents %></td>
-      <td><%= invoice.amount_currency %></td>
-      <td><%= invoice.emitted_at.strftime("%d/%m/%Y at %I:%M%p") %></td>
-      <td><%= invoice.expires_at.strftime("%d/%m/%Y at %I:%M%p") %></td>
-      <td><%= invoice.signed_at.strftime("%d/%m/%Y at %I:%M%p") %></td>
-      <td><%= invoice.cfdi_digital_stamp %></td>
-      <td><%= link_to 'Show', invoice %></td>
-      <td><%= link_to 'Edit', edit_invoice_path(invoice) %></td>
-      <td><%= link_to 'Destroy', invoice, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-    </tr>
-  <% end %>
-  </tbody>
-</table>
+      <tbody>
+      <% @invoices.each do |invoice| %>
+        <tr>
+          <td><%= invoice.invoice_uid %></td>
+          <td><%= invoice.status %></td>
+          <td><%= invoice.emitter.name %></td>
+          <td><%= invoice.receiver.name %></td>
+          <td><%= invoice.amount_cents %></td>
+          <td><%= invoice.amount_currency %></td>
+          <td><%= invoice.emitted_at.strftime("%d/%m/%Y at %I:%M%p") %></td>
+          <td><%= invoice.expires_at.strftime("%d/%m/%Y at %I:%M%p") %></td>
+          <td><%= invoice.signed_at.strftime("%d/%m/%Y at %I:%M%p") %></td>
+          <td><%= invoice.cfdi_digital_stamp %></td>
+          <td><%= link_to 'Show', invoice %></td>
+          <td><%= link_to 'Edit', edit_invoice_path(invoice) %></td>
+          <td><%= link_to 'Destroy', invoice, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
 
-<%= will_paginate @invoices, renderer: BootstrapPagination::Rails, next_label: "Siguiente", previous_label: "Anterior" %>
+    <%= will_paginate @invoices, renderer: BootstrapPagination::Rails, next_label: "Siguiente", previous_label: "Anterior" %>
+</div>

@@ -2,7 +2,7 @@
 
 Rails.application.routes.draw do
   resources :invoices
-  root 'home#index', as: :home_index
+  root 'invoices#index', as: :invoice_index
 
   devise_for :users
 

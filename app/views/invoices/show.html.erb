@@ -1,54 +1,62 @@
-<p id="notice"><%= notice %></p>
+<div class="content-container">
+  <a href="/invoices" class="goBack">< Invoices</a>
 
-<p>
-  <strong>Invoice uid:</strong>
-  <%= @invoice.invoice_uid %>
-</p>
+  <div style="max-width: 500px; margin-top: 100px; word-wrap:break-word;">
+    <p>
+      <strong>Invoice uid:</strong>
+      <%= @invoice.invoice_uid %>
+    </p>
 
-<p>
-  <strong>Status:</strong>
-  <%= @invoice.status %>
-</p>
+    <p>
+      <strong>Status:</strong>
+      <%= @invoice.status %>
+    </p>
 
-<p>
-  <strong>Emitter:</strong>
-  <%= @invoice.emitter_id %>
-</p>
+    <p>
+      <strong>Emitter:</strong>
+      <%= @invoice.emitter_id %>
+    </p>
 
-<p>
-  <strong>Receiver:</strong>
-  <%= @invoice.receiver_id %>
-</p>
+    <p>
+      <strong>Receiver:</strong>
+      <%= @invoice.receiver_id %>
+    </p>
 
-<p>
-  <strong>Amount cents:</strong>
-  <%= @invoice.amount_cents %>
-</p>
+    <p>
+      <strong>Amount cents:</strong>
+      <%= @invoice.amount_cents %>
+    </p>
 
-<p>
-  <strong>Amount currency:</strong>
-  <%= @invoice.amount_currency %>
-</p>
+    <p>
+      <strong>Amount currency:</strong>
+      <%= @invoice.amount_currency %>
+    </p>
 
-<p>
-  <strong>Emitted at:</strong>
-  <%= @invoice.emitted_at %>
-</p>
+    <p>
+      <strong>Emitted at:</strong>
+      <%= @invoice.emitted_at %>
+    </p>
 
-<p>
-  <strong>Expires at:</strong>
-  <%= @invoice.expires_at %>
-</p>
+    <p>
+      <strong>Expires at:</strong>
+      <%= @invoice.expires_at %>
+    </p>
 
-<p>
-  <strong>Signed at:</strong>
-  <%= @invoice.signed_at %>
-</p>
+    <p>
+      <strong>Signed at:</strong>
+      <%= @invoice.signed_at %>
+    </p>
 
-<p>
-  <strong>Cfdi digital stamp:</strong>
-  <%= @invoice.cfdi_digital_stamp %>
-</p>
+    <p>
+      <strong>Cfdi digital stamp:</strong>
+      <%= @invoice.cfdi_digital_stamp %>
+    </p>
+  </div>
 
-<%= link_to 'Edit', edit_invoice_path(@invoice) %> |
-<%= link_to 'Back', invoices_path %>
+  <div class="d-flex justify-content-between" style="width: 200px;">
+    <%= link_to 'Edit', edit_invoice_path(@invoice) %> |
+    <%= link_to 'Back', invoices_path %>
+
+  </div>
+
+</div>

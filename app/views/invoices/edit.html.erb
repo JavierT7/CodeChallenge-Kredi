@@ -1,6 +1,12 @@
-<h1>Editing Invoice</h1>
+<div class="content-container">
+  <a href="/invoices" class="goBack">< Invoices</a>
 
-<%= render 'form', invoice: @invoice %>
+  <div class="form">
+    <h1>Editing Invoice</h1>
 
-<%= link_to 'Show', @invoice %> |
-<%= link_to 'Back', invoices_path %>
+    <%= render 'form', invoice: @invoice %>
+
+    <%= link_to 'Show', @invoice %> |
+    <%= link_to 'Back', invoices_path %>
+  </div>
+</div>

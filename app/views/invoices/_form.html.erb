@@ -11,57 +11,63 @@
     </div>
   <% end %>
 
-  <div class="field">
+  <div class="input-field">
     <%= form.label :invoice_uid %>
     <%= form.text_field :invoice_uid %>
   </div>
 
-  <div class="field">
+  <div class="input-field">
     <%= form.label :status %>
-    <%= form.select :status, Invoice::INVOICE_STATUSES.map { |s| [s] }%>
+    <%= form.select :status, Invoice::INVOICE_STATUSES.map { |s| [s] }, {}, {class: "simple-select"}%>
   </div>
 
-  <div class="field">
+  <div class="input-field">
     <%= form.label :emitter_id %>
-    <%= form.select :emitter_id, User.all.collect{|u| [u.name, u.id]}%>
+    <%= form.select :emitter_id, User.all.collect{|u| [u.name, u.id]}, {}, {class: "simple-select"}%>
   </div>
 
-  <div class="field">
+  <div class="input-field">
     <%= form.label :receiver_id %>
-    <%= form.select :receiver_id, User.all.collect{|u| [u.name, u.id]}%>
+    <%= form.select :receiver_id, User.all.collect{|u| [u.name, u.id]}, {}, {class: "simple-select"}%>
   </div>
 
-  <div class="field">
+  <div class="input-field">
     <%= form.label :amount_cents %>
     <%= form.number_field :amount_cents %>
   </div>
 
-  <div class="field">
+  <div class="input-field">
     <%= form.label :amount_currency %>
     <%= form.text_field :amount_currency %>
   </div>
 
-  <div class="field">
+  <div class="input-field">
     <%= form.label :emitted_at %>
-    <%= form.datetime_select :emitted_at %>
+    <div class="date-select">
+      <%= form.date_select :emitted_at %>
+    </div>
   </div>
 
-  <div class="field">
+  <div class="input-field">
     <%= form.label :expires_at %>
-    <%= form.datetime_select :expires_at %>
+    <div class="date-select">
+      <%= form.date_select :expires_at %>
+    </div>
   </div>
 
-  <div class="field">
+  <div class="input-field">
     <%= form.label :signed_at %>
-    <%= form.datetime_select :signed_at %>
+    <div class="date-select">
+      <%= form.date_select :signed_at %>
+    </div>
   </div>
 
-  <div class="field">
+  <div class="input-field">
     <%= form.label :cfdi_digital_stamp %>
     <%= form.text_field :cfdi_digital_stamp %>
   </div>
 
-  <div class="actions">
+  <div class="form-actions">
     <%= form.submit %>
   </div>
 <% end %>
