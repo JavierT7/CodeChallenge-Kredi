@@ -3,13 +3,17 @@ class Invoice < ApplicationRecord
   INVOICE_TYPES = ['ALL','RECEIVED', 'EMITTED']
 
   validate :emitter_and_receiver_difference
+  validates_uniqueness_of :invoice_uid
 
   belongs_to :emitter, class_name: 'User', foreign_key: :emitter_id
   belongs_to :receiver, class_name: 'User', foreign_key: :receiver_id
 
+  delegate :name, to: :emitter, prefix: true
+  delegate :name, to: :receiver, prefix: true
+
   scope :f_by_status, ->(status) { where(status: status) if status.present?}
-  scope :f_by_emitter, ->(emitter) { where(emitter: emitter) if emitter.present?}
-  scope :f_by_receiver, ->(receiver) { where(receiver: receiver) if receiver.present?}
+  scope :f_by_emitter, ->(emitter) { includes(:emitter).where(emitter: emitter) if emitter.present?}
+  scope :f_by_receiver, ->(receiver) { includes(:emitter).where(receiver: receiver) if receiver.present?}
   scope :f_by_min_emitted_at, ->(min_emitted_at) { where(emitted_at: min_emitted_at..) if min_emitted_at.present?}
   scope :f_by_max_emitted_at, ->(max_emitted_at) { where(emitted_at: ..max_emitted_at) if max_emitted_at.present?}
   scope :f_by_type, ->(type, user_id) {
