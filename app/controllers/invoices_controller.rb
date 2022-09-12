@@ -14,9 +14,9 @@ class InvoicesController < ApplicationController
       @range_max  = filters['amount_range_max']
 
       @invoices = Invoice.f_by_status(@status).f_by_emitter(@emitter).f_by_receiver(@receiver).min_amount(@range_min).max_amount(@range_max)
-      @invoices = @invoices.paginate(:page => params[:page], :per_page => 50)
+      @invoices = @invoices.paginate(:page => params[:page], :per_page => 5)
     else
-      @invoices = Invoice.all.paginate(:page => params[:page], :per_page => 50)
+      @invoices = Invoice.all.paginate(:page => params[:page], :per_page => 5)
     end
   end
 
@@ -39,7 +39,7 @@ class InvoicesController < ApplicationController
 
     respond_to do |format|
       if @invoice.save
-        format.html { redirect_to invoice_path(@invoice), notice: "Invoice was successfully created." }
+        format.html { redirect_to invoices_path, notice: "Invoice was successfully created." }
         format.json { render :show, status: :created, location: @invoice }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -52,7 +52,7 @@ class InvoicesController < ApplicationController
   def update
     respond_to do |format|
       if @invoice.update(invoice_params)
-        format.html { redirect_to invoice_path(@invoice), notice: "Invoice was successfully updated." }
+        format.html { redirect_to invoices_path, notice: "Invoice was successfully updated." }
         format.json { render :show, status: :ok, location: @invoice }
       else
         format.html { render :edit, status: :unprocessable_entity }

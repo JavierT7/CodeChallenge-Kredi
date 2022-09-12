@@ -1,5 +1,15 @@
-<h1>New Invoice</h1>
+<div class="content-container">
+  <a href="/invoices" class="goBack">< Invoices</a>
 
-<%= render 'form', invoice: @invoice %>
+  <div class="form">
 
-<%= link_to 'Back', invoices_path %>
+    <h1>New Invoice</h1>
+
+    <%= render 'form', invoice: @invoice %>
+
+    <div class="d-flex justify-content-center">
+      <%= link_to 'Back', invoices_path %>
+    </div>
+
+  </div>
+</div>
