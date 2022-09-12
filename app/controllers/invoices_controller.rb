@@ -94,7 +94,7 @@ class InvoicesController < ApplicationController
       SaveInvoicesWorker.perform_async(params[:zip_file].tempfile.path)
     end
     respond_to do |format|
-      format.html { redirect_to invoices_url, notice: "Invoices in process, please refresh later." }
+      format.html { redirect_to invoices_url, notice: "Invoices in process, don't close this window.... please refresh later." }
       format.json { head :no_content }
     end
   end

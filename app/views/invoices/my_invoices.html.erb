@@ -28,7 +28,7 @@
     </div>
 
 
-    <table>
+    <table >
       <thead>
       <tr>
         <th>Invoice uid</th>
@@ -57,7 +57,7 @@
           <td><%= invoice.emitted_at.strftime("%d/%m/%Y at %I:%M%p") %></td>
           <td><%= invoice.expires_at.strftime("%d/%m/%Y at %I:%M%p") %></td>
           <td><%= invoice.signed_at.strftime("%d/%m/%Y at %I:%M%p") %></td>
-          <td><%= invoice.cfdi_digital_stamp %></td>
+          <td><a href="<%= invoice_qr_code_path(invoice.id) %>">QR</a></td>
           <td><%= link_to 'Show', invoice %></td>
           <td><%= link_to 'Edit', edit_invoice_path(invoice) %></td>
           <td><%= link_to 'Destroy', invoice, method: :delete, data: { confirm: 'Are you sure?' } %></td>
