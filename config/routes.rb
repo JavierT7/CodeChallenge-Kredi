@@ -1,12 +1,15 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  resources :invoices
+  require 'sidekiq/web'
+  mount Sidekiq::Web => '/sidekiq'
+
   root 'invoices#index', as: :invoice_index
 
   devise_for :users
 
   resources :users
+  resources :invoices
 
   get 'my_invoices' => 'invoices#my_invoices', as: :my_invoices
   post 'upload_zip_file' => 'invoices#upload_zip_file', as: :upload_zip_file

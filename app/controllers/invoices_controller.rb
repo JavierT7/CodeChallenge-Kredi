@@ -14,9 +14,9 @@ class InvoicesController < ApplicationController
       @range_max  = filters['amount_range_max']
 
       @invoices = Invoice.f_by_status(@status).f_by_emitter(@emitter).f_by_receiver(@receiver).min_amount(@range_min).max_amount(@range_max)
-      @invoices = @invoices.paginate(:page => params[:page], :per_page => 5)
+      @invoices = @invoices.paginate(:page => params[:page], :per_page => 50)
     else
-      @invoices = Invoice.all.paginate(:page => params[:page], :per_page => 5)
+      @invoices = Invoice.all.paginate(:page => params[:page], :per_page => 50)
     end
   end
 
@@ -91,21 +91,10 @@ class InvoicesController < ApplicationController
 
   def upload_zip_file
     if params[:zip_file].present?
-      Zip::File.open(params[:zip_file].tempfile) do |zip_file|
-        zip_file.each do |entry|
-          # Extract to file/directory/symlink
-          puts "Extracting #{entry.name}"
-          # Read into memory
-          if entry.file?
-            content = entry.get_input_stream.read
-            hash = Hash.from_xml(content)['hash']
-            SaveInvoicesWorker.perform_async(hash)
-          end
-        end
-      end
+      SaveInvoicesWorker.perform_async(params[:zip_file].tempfile.path)
     end
     respond_to do |format|
-      format.html { redirect_to invoices_url, notice: "Invoices created successfully created." }
+      format.html { redirect_to invoices_url, notice: "Invoices in process, please refresh later." }
       format.json { head :no_content }
     end
   end

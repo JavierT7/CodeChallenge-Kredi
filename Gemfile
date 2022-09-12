@@ -60,3 +60,6 @@ gem 'will_paginate-bootstrap'
 gem 'rubyzip'
 
 gem "sidekiq", "~> 6.5"
+
+gem "rails_best_practices"
+
