@@ -4,6 +4,7 @@ class Invoice < ApplicationRecord
 
   validate :emitter_and_receiver_difference
   validates_uniqueness_of :invoice_uid
+  validates_presence_of :invoice_uid
 
   belongs_to :emitter, class_name: 'User', foreign_key: :emitter_id
   belongs_to :receiver, class_name: 'User', foreign_key: :receiver_id

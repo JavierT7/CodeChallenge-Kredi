@@ -5,4 +5,5 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable
 
   validates_uniqueness_of :rfc
+  validates_presence_of :rfc
 end
