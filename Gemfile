@@ -63,3 +63,6 @@ gem 'rubyzip'
 gem "sidekiq", "~> 6.5"
 
 gem 'net-smtp'
+
+gem 'rqrcode'
+
